@@ -1,0 +1,148 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int cardNoArray[16];
+int numberOfDigits;
+long long cardNumber;
+int reversedCardNumber[16], length = 0;
+int oddTotal;
+int evenTotal;
+int oddevenTotal;
+
+int main()
+{
+	int option;	
+	{
+		for (int i = 0; i < 1; i++) 
+		{
+			printf("Enter 1 to run the programme or 2 to run the help file \n");
+			scanf("%d", &option);			
+			if (option == 1)
+			{
+				enterCardNumber();
+				numberOfDigits = checkNoOfDigits();
+				convertToArray();
+				luhnsTest();
+				cardType();
+			}
+			else
+			{		
+				printf("Enter Credit card number to check its validity and details \nEnter your Card number and press Enter to have it display details and information about your card \nThe program will display whether your card number is valid, whether it has a valid number of values and what card it is. \n");
+			}
+			i--;		
+		}
+	}
+
+	return 0;
+}
+
+int enterCardNumber()
+{
+	printf("Please enter your 15 or 16 digit card number\n");		
+	scanf("%lld", &cardNumber);
+	return 0;
+}
+
+int checkNoOfDigits()		
+{
+	if (cardNumber > 99999999999999 && cardNumber < 1000000000000000)
+	{
+		printf("Your card has a valid number of values\n");
+		length = 15;
+	}
+	else if (cardNumber > 999999999999999 && cardNumber < 10000000000000000)
+	{
+		printf("Your card has a valid number of values\n");
+		length = 16;
+	}
+	else printf("Your card number has an invalid number of values\n");
+	
+	return length;
+
+}
+
+int convertToArray()
+{
+	char cardCharArray[16];
+
+	if (length == 15);
+
+	_snprintf(cardCharArray, 15, "%lld", cardNumber);
+
+	if (length == 16)
+
+	_snprintf(cardCharArray, 16, "%lld", cardNumber);
+
+
+	for (int i = 0; i < length; i++) { 
+
+		cardNoArray[i] = cardCharArray[i] - '0';
+	}
+	return 0;
+}
+
+int luhnsTest()
+{
+
+	if (length == 15)		
+	{
+		for (int i = 0; i < 15; i++)
+		{
+			reversedCardNumber[i] = cardNoArray[14-i];
+		}
+	}
+
+	else if (length == 16)
+
+	{
+		for (int i = 0; i < 16; i++)
+		{
+			reversedCardNumber[i] = cardNoArray[15 - i];
+		}
+	}
+
+
+	for (int i = 0; i < length; i+=2)	
+	{
+		oddTotal += reversedCardNumber[i];
+		
+	}
+
+	for (int i = 1; i < length; i += 2)
+	{
+		reversedCardNumber[i] *= 2;
+		if (reversedCardNumber[i]>9) 
+		{
+			(reversedCardNumber[i] -= 9);
+		}
+		evenTotal += reversedCardNumber[i];
+		oddevenTotal = evenTotal + oddTotal;	
+	}
+	{
+		if (oddevenTotal % 10 == 0)	
+		{
+			printf("Your number is a valid credit card number\n");
+		}
+		else
+		{
+			printf("Your number is not a valid credit card number\n");
+		}
+	}
+
+
+
+	return 0;
+}
+
+	int cardType()	
+	{
+		if (cardNoArray[0] == 4) printf("Your card is a Visa Card \n");		
+		if (cardNoArray[0] == 3 && cardNoArray[1] == 4) printf("Your card is an American Express \n");
+		if (cardNoArray[0] == 5 && cardNoArray[1] >= 0 && cardNoArray[1] < 6) printf("Your card is a Master Card \n");
+		if (cardNoArray[0] == 6 && cardNoArray[1] == 0 && cardNoArray[3] == 1 && cardNoArray[4] == 1) printf("Your card is a Discover Card \n");
+
+		return 0;
+
+	}
