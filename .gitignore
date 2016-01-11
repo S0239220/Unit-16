@@ -1,0 +1,148 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int cardNoArray[16];
+int numberOfDigits;
+long long cardNumber;
+int reversedCardNumber[16], length = 0;
+int oddTotal;
+int evenTotal;
+int oddevenTotal;
+
+int main()
+{
+	int option;	//help menu
+	{
+		for (int i = 0; i < 1; i++) //Beginning of For loop
+		{
+			printf("Enter 1 to run the programme or 2 to run the help file \n");
+			scanf("%d", &option);			//if 1 is inputed then the programme continues as normal
+			if (option == 1)
+			{
+				enterCardNumber();
+				numberOfDigits = checkNoOfDigits();
+				convertToArray();
+				luhnsTest();
+				cardType();
+			}
+			else
+			{		//else a message giving a general description of the programmes use appears
+				printf("Enter Credit card number to check its validity and details \nEnter your Card number and press Enter to have it display details and information about your card \nThe program will display whether your card number is valid, whether it has a valid number of values and what card it is. \n");
+			}
+			i--;		//End of For loop loops the programme back to the number entry
+		}
+	}
+
+	return 0;
+}
+
+int enterCardNumber()
+{
+	printf("Please enter your 15 or 16 digit card number\n");		//Requests the user enter in their card details and assigns them to cardNumber
+	scanf("%lld", &cardNumber);
+	return 0;
+}
+
+int checkNoOfDigits()		//Checks whether or not the card number has the correct number of values and gives different responses depending on whether it does or not
+{
+	if (cardNumber > 99999999999999 && cardNumber < 1000000000000000)
+	{
+		printf("Your card has a valid number of values\n");
+		length = 15;
+	}
+	else if (cardNumber > 999999999999999 && cardNumber < 10000000000000000)
+	{
+		printf("Your card has a valid number of values\n");
+		length = 16;
+	}
+	else printf("Your card number has an invalid number of values\n");
+	
+	return length;
+
+}
+
+int convertToArray()
+{
+	char cardCharArray[16];
+
+	if (length == 15);
+
+	_snprintf(cardCharArray, 15, "%lld", cardNumber);
+
+	if (length == 16)
+
+	_snprintf(cardCharArray, 16, "%lld", cardNumber);
+
+
+	for (int i = 0; i < length; i++) { //Values of the cardNoArray are assigned to the cardCharArray
+
+		cardNoArray[i] = cardCharArray[i] - '0';
+	}
+	return 0;
+}
+
+int luhnsTest()
+{
+
+	if (length == 15)		//values of cardNoArray are assigned to their opposite values of reversedCardNumber
+	{
+		for (int i = 0; i < 15; i++)
+		{
+			reversedCardNumber[i] = cardNoArray[14-i];
+		}
+	}
+
+	else if (length == 16)
+
+	{
+		for (int i = 0; i < 16; i++)
+		{
+			reversedCardNumber[i] = cardNoArray[15 - i];
+		}
+	}
+
+
+	for (int i = 0; i < length; i+=2)	//For loop picks and adds odd number values to the oddTotal
+	{
+		oddTotal += reversedCardNumber[i];
+		
+	}
+
+	for (int i = 1; i < length; i += 2) //Same function except with even values for the evenTotal
+	{
+		reversedCardNumber[i] *= 2;
+		if (reversedCardNumber[i]>9) //Subtracts 9 from eav value above 10
+		{
+			(reversedCardNumber[i] -= 9);
+		}
+		evenTotal += reversedCardNumber[i];
+		oddevenTotal = evenTotal + oddTotal;	//Adds even and odd totals together
+	}
+	{
+		if (oddevenTotal % 10 == 0)	//Divides the total by 10 and checks whether or not the end result ends in zero, then displays a message for the result
+		{
+			printf("Your number is a valid credit card number\n");
+		}
+		else
+		{
+			printf("Your number is not a valid credit card number\n");
+		}
+	}
+
+
+
+	return 0;
+}
+
+	int cardType()		//defines the different card number criterias that if fulfilled displays the message associated with that card type
+	{
+		if (cardNoArray[0] == 4) printf("Your card is a Visa Card \n");		
+		if (cardNoArray[0] == 3 && cardNoArray[1] == 4) printf("Your card is an American Express \n");
+		if (cardNoArray[0] == 5 && cardNoArray[1] >= 0 && cardNoArray[1] < 6) printf("Your card is a Master Card \n");
+		if (cardNoArray[0] == 6 && cardNoArray[1] == 0 && cardNoArray[3] == 1 && cardNoArray[4] == 1) printf("Your card is a Discover Card \n");
+
+		return 0;
+
+	}
